@@ -1,0 +1,19 @@
+Cowrie install
+
+http://www.micheloosterhof.com/cowrie/
+
+https://github.com/micheloosterhof/cowrie
+
+
+apt-get install virtualenv python-setuptools python-dev libssl-dev libffi-dev libgmp3-dev libmpfr-dev libmpc-dev 
+
+# create virtualenv
+virtualenv v2
+
+# activate virtualenv
+
+source v2/bin/activate
+
+# install python deps
+pip install twisted cryptography pyopenssl gmpy2 pycrypto service_identity
+
