@@ -2,9 +2,14 @@
 
 import paramiko, sys, os, socket
 
-def conn(ssh, host, user, passwd, code=0):
+def conn(ssh, hoststr, user, passwd, code=0):
+	if ":" in hoststr:
+		(host, portnr) = hoststr.split(":")
+	else:
+		host = hoststr
+		portnr = 22
 	try:
-		ssh.connect(host, port=22, username=user, password=passwd)
+		ssh.connect(host, port=portnr, username=user, password=passwd)
 	except paramiko.AuthenticationException:
 		code=1
 	except socket.error, e:
