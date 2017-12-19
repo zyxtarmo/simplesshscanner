@@ -5,6 +5,7 @@ import paramiko, sys, os, socket
 def conn(ssh, hoststr, user, passwd, code=0):
 	if ":" in hoststr:
 		(host, portnr) = hoststr.split(":")
+		portnr = int(portnr)
 	else:
 		host = hoststr
 		portnr = 22
